@@ -1,0 +1,95 @@
+---
+title: "Homework 5 OPIM 5603"
+author: "Sahibpreet Singh"
+date: "18 April 2021"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_float: TRUE
+    theme: united
+  html_notebook: default
+  word_document:
+    toc: yes
+    toc_float: TRUE
+  pdf_document: default
+---
+
+#Problem 1
+```{r}
+ library(readxl)
+OilPlus <- read_excel("C:/Users/Sahibpreet Singh/Desktop/My Report Card/University of Connecticut/5603/hw5/OilPlus.xlsx")
+```
+##Problem 1(a)
+```{r}
+
+plot(OilPlus$heat_oil,OilPlus$avg_temp,xlab="Heating Oil Consumption (1,000 gallons)",ylab="Average Temperature (degrees Fahrenheit)",main="Plot Graph of Temperature and Oil Consumption",col="blue")
+
+lm(heat_oil ~ avg_temp,OilPlus)
+abline(lm(heat_oil ~ avg_temp,OilPlus),col="red")
+
+#Relation between Oil Consumption and Temperature is linear with a negative slope
+```
+
+##Problem 1(b)
+```{r}
+
+mymodel.lm<- lm(heat_oil ~ avg_temp,OilPlus)
+summary(mymodel.lm)
+
+myNewData=data.frame(avg_temp=35.2)
+predict(mymodel.lm,myNewData,interval="predict",level=0.95)
+
+#The heating oil consumption for next December based on the average temperature = 65.51513 thousand gallon.
+
+```
+
+##Problem 1(c)
+```{r}
+#Regression model using R helps evaluate or predict next December's value based on the pattern observed in the previous months of December along with other month observations. R gives the perfect relation which defines  variation along. Using average value to predict will give high residual value because there will be a lot of variation in the value of dependent variable. Linear regression model helps explain variation better.
+
+```
+
+##Problem 1(d)
+```{r}
+mymodel.res<-resid(mymodel.lm)
+plot(OilPlus$avg_temp,mymodel.res,xlab="Average Temperature(Fahrenheit)",ylab="Heating Oil Consumption ( 1000 gallon)", main="Residual Plot",col="orange")
+abline(0,0, col="red")
+
+# Plotting of residuals vs. time
+plot(rownames(OilPlus),mymodel.res,xlab="Time Period",ylab="Residuals",main="Residuals over Time",col="purple")
+abline(0,0,col="red")
+
+#Confidence Interval
+confint(mymodel.lm,level=0.95)
+confint(mymodel.lm,level=0.99)
+
+#Therefore, we have the following answers
+#R Square= 0.688
+#Adjusted R Squared= 0.6824
+#P-Value < 0.05 
+#95% Confidence Interval = [-1.464,-1.006]
+#99% Confidence Interval = [-1.540,-0.930]
+
+#The confidence intervals do not contain 0, so therefore we can say that the independent variable 'Temperature' has an effect on the dependent output variable.Also the p-val<0.05 suggests that temperature is a significant variable.
+#R Square value is almost equal to 0.7, thus, the model is significant enough.
+#Residual plot:
+#In the above residual plots we see that there is no pattern in the scatterplot. 
+
+```
+
+##Problem 1(e)
+```{r}
+OilPlus$avg_temp2<-OilPlus$avg_temp^2
+OilPlus
+
+mymodel.nlm<-lm(heat_oil~avg_temp+avg_temp2,OilPlus)
+summary(mymodel.nlm)
+
+#Both p-values are lesser than 0.05 and also R-Square value gets higher so we don't drop any variable. This also tells that the model is no longer linear and the quadratic term is significant in the model.
+```
+
+##Problem 1(f)
+```{r}
+# Yes, I would recommend using this regression model to predict heating oil consumption at OilPlusbecause the p-value for the new variable was lesser than 0.05, which means it is a significant variable. The variable has an effect on the dependent variable 'OilConsumption'. Also, the R-squared value is improved, therefore the model is good to be used
+```
